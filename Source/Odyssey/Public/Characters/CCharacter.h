@@ -4,15 +4,27 @@
 #include "GameFramework/Character.h"
 #include "CCharacter.generated.h"
 
-UCLASS()
+/**
+ *	Odyssey 프로젝트 캐릭터 클래스의 부모 클래스
+ */
+
+class UCStateComponent;
+class UCMovementComponent;
+
+UCLASS(Abstract, NotBlueprintable)
 class ODYSSEY_API ACCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	ACCharacter();
-	virtual void Tick(float DeltaTime) override;
+	ACCharacter(const FObjectInitializer& ObjectInitializer);
+
+	virtual void OnConstruction(const FTransform& Transform) override;
 
 protected:
-	virtual void BeginPlay() override;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UCStateComponent> StateComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UCMovementComponent> MovementComponent;
 };
