@@ -6,6 +6,8 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
 
+#include "Utilities/CDebug.h"
+
 #define CheckTrue(x) { if (x == true) return; }
 #define CheckTrueResult(x, y) { if (x == true) return y; }
 
