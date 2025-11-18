@@ -1,6 +1,7 @@
 #include "Characters/CCharacter.h"
 #include "Components/CStateComponent.h"
 #include "Components/CMovementComponent.h"
+#include "Components/CWeaponComponent.h"
 
 ACCharacter::ACCharacter(const FObjectInitializer& ObjectInitializer)
 {
@@ -11,11 +12,18 @@ ACCharacter::ACCharacter(const FObjectInitializer& ObjectInitializer)
 	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.f, 0.0f));
 
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin'"));
+	if (mesh.Object)
+		GetMesh()->SetSkeletalMesh(mesh.Object);
+
 	// StateComponent
 	StateComponent = CreateDefaultSubobject<UCStateComponent>(TEXT("StateComponent"));
 
 	// MovementComponent
 	MovementComponent = CreateDefaultSubobject<UCMovementComponent>(TEXT("MovementComponent"));
+
+	// WeaponComponent
+	WeaponComponent = CreateDefaultSubobject<UCWeaponComponent>(TEXT("WeaponComponent"));
 	
 	PrimaryActorTick.bCanEverTick = true;
 }

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Components/CWeaponComponent.h"
 #include "CAnimInstance.generated.h"
 
 class ACCharacter;
@@ -32,6 +33,16 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bCrouched = false;
 
+	UPROPERTY()
+	TObjectPtr<UCWeaponComponent> WeaponComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	EWeaponType WeaponType = EWeaponType::Max;
+
 	virtual void NativeBeginPlay() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+private:
+	UFUNCTION()
+	void OnWeaponTypeChanged(EWeaponType InPrevWeaponType, EWeaponType InNewWeaponType);
 };

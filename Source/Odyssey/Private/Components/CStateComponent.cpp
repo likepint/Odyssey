@@ -37,9 +37,9 @@ void UCStateComponent::SetDeadState()
 
 void UCStateComponent::ChangeType(EStateType InNewStateType)
 {
-	EStateType prevStateType = CurrStateType;
-	CurrStateType = InNewStateType;
+	EStateType prevStateType = StateType;
+	StateType = InNewStateType;
 
 	if (OnStateTypeChanged.IsBound())
-		OnStateTypeChanged.Broadcast(prevStateType, CurrStateType);
+		OnStateTypeChanged.Broadcast(prevStateType, StateType);
 }

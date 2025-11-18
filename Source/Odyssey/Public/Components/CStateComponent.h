@@ -25,13 +25,13 @@ class ODYSSEY_API UCStateComponent : public UCComponent
 	GENERATED_BODY()
 
 public:
-	FORCEINLINE bool IsIdleState() const { return CurrStateType == EStateType::Idle; }
-	FORCEINLINE bool IsEquippingState() const { return CurrStateType == EStateType::Equipping; }
-	FORCEINLINE bool IsAttackingState() const { return CurrStateType == EStateType::Attacking; }
-	FORCEINLINE bool IsDamagedState() const { return CurrStateType == EStateType::Damaged; }
-	FORCEINLINE bool IsDodgeState() const { return CurrStateType == EStateType::Dodge; }
-	FORCEINLINE bool IsParkourState() const { return CurrStateType == EStateType::Parkour; }
-	FORCEINLINE bool IsDeadState() const { return CurrStateType == EStateType::Dead; }
+	FORCEINLINE bool IsIdleState() const { return StateType == EStateType::Idle; }
+	FORCEINLINE bool IsEquippingState() const { return StateType == EStateType::Equipping; }
+	FORCEINLINE bool IsAttackingState() const { return StateType == EStateType::Attacking; }
+	FORCEINLINE bool IsDamagedState() const { return StateType == EStateType::Damaged; }
+	FORCEINLINE bool IsDodgeState() const { return StateType == EStateType::Dodge; }
+	FORCEINLINE bool IsParkourState() const { return StateType == EStateType::Parkour; }
+	FORCEINLINE bool IsDeadState() const { return StateType == EStateType::Dead; }
 
 	void SetIdleState();
 	void SetEquippingState();
@@ -45,7 +45,7 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "State")
-	EStateType CurrStateType = EStateType::Idle;
+	EStateType StateType = EStateType::Idle;
 
 	void ChangeType(EStateType InNewStateType);
 };

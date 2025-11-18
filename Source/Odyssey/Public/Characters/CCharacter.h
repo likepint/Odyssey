@@ -10,6 +10,7 @@
 
 class UCStateComponent;
 class UCMovementComponent;
+class UCWeaponComponent;
 
 UCLASS(Abstract, NotBlueprintable)
 class ODYSSEY_API ACCharacter : public ACharacter
@@ -27,4 +28,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCMovementComponent> MovementComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UCWeaponComponent> WeaponComponent;
 };

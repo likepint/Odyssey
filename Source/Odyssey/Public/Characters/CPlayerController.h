@@ -16,7 +16,10 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere)
-	TObjectPtr<UInputMappingContext> IMC_Locomotion;
+	TSoftObjectPtr<UInputMappingContext> IMC_Locomotion;
+
+	UPROPERTY(EditAnywhere)
+	TSoftObjectPtr<UInputMappingContext> IMC_Combat;
 	
 	virtual void OnPossess(APawn* InPawn) override;
 };

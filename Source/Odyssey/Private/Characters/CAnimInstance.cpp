@@ -3,6 +3,7 @@
 #include "Characters/CCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CMovementComponent.h"
+#include "Components/CWeaponComponent.h"
 
 void UCAnimInstance::NativeBeginPlay()
 {
@@ -10,6 +11,10 @@ void UCAnimInstance::NativeBeginPlay()
 
 	OwnerCharacter = Cast<ACCharacter>(TryGetPawnOwner());
 	CheckNull(OwnerCharacter);
+
+	WeaponComponent = OwnerCharacter->GetComponentByClass<UCWeaponComponent>();
+	if (WeaponComponent)
+		WeaponComponent->OnWeaponTypeChange.AddDynamic(this, &UCAnimInstance::OnWeaponTypeChanged);
 }
 
 void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -31,4 +36,9 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		if (UCMovementComponent* movement = OwnerCharacter->GetComponentByClass<UCMovementComponent>())
 			bCrouched = movement->IsCrouched();
 	}
+}
+
+void UCAnimInstance::OnWeaponTypeChanged(EWeaponType InPrevWeaponType, EWeaponType InNewWeaponType)
+{
+	WeaponType = InNewWeaponType;
 }

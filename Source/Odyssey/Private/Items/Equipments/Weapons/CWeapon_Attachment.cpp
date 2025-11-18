@@ -47,7 +47,8 @@ void ACWeapon_Attachment::BeginPlay()
 
 void ACWeapon_Attachment::AttachTo(FName InSocketName)
 {
-	FAttachmentTransformRules rules(EAttachmentRule::KeepRelative, true);
+	CheckNull(OwnerCharacter);
 
+	FAttachmentTransformRules rules(EAttachmentRule::KeepRelative, true);
 	AttachToComponent(OwnerCharacter->GetMesh(), rules, InSocketName);
 }

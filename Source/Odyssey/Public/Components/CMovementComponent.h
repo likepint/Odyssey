@@ -7,7 +7,7 @@
 
 class UEnhancedInputComponent;
 
-class UInputAction;
+class UCMovementComponent_DataAsset;
 
 struct FInputActionValue;
 
@@ -42,27 +42,10 @@ public:
 	void SetControlRotation(bool bInControlRotation);
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enhanced Input")
-	TObjectPtr<UInputAction> IA_Movement;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DataAsset")
+	TSoftObjectPtr<UCMovementComponent_DataAsset> MovementComponentAsset;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enhanced Input")
-	TObjectPtr<UInputAction> IA_Crouch;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enhanced Input")
-	TObjectPtr<UInputAction> IA_Sprint;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enhanced Input")
-	TObjectPtr<UInputAction> IA_Walk;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enhanced Input")
-	TObjectPtr<UInputAction> IA_Look;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enhanced Input")
-	TObjectPtr<UInputAction> IA_Dodge;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Enhanced Input")
-	FVector2D Sensitivity = FVector2D(45.0f, 45.0f);
-
+	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
@@ -80,10 +63,10 @@ private:
 	float TargetSpeed = 0.0f;
 	float TargetSpeedInterpRate = 2.5f;
 
-	bool bRotatable = true;
+	UPROPERTY(EditAnywhere, Category = "Sensitivity")
+	FVector2D Sensitivity = FVector2D(45.0f, 45.0f);
 
-	UPROPERTY(EditAnywhere, Category = "Montage")
-	TObjectPtr<UAnimMontage> DodgeMontage;
+	bool bRotatable = true;
 
 	void SetMaxWalkSpeed(const float& InDeltaTime);
 
