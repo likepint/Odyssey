@@ -7,7 +7,7 @@
 
 class UEnhancedInputComponent;
 
-class UCMovementComponent_DataAsset;
+class UCMovementComponentAsset;
 
 struct FInputActionValue;
 
@@ -28,6 +28,8 @@ class ODYSSEY_API UCMovementComponent : public UCComponent, public IIBindInput
 {
 	GENERATED_BODY()
 
+	friend class UCMovementComponentAsset;
+
 public:
 	FORCEINLINE bool IsCrouched() const { return bCrouched; }
 
@@ -43,7 +45,7 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DataAsset")
-	TSoftObjectPtr<UCMovementComponent_DataAsset> MovementComponentAsset;
+	TObjectPtr<UCMovementComponentAsset> MovementComponentAsset;
 
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

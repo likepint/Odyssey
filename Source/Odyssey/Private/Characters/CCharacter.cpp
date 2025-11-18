@@ -1,21 +1,24 @@
 #include "Characters/CCharacter.h"
+#include "Global.h"
 #include "Components/CStateComponent.h"
 #include "Components/CMovementComponent.h"
 #include "Components/CWeaponComponent.h"
 
 ACCharacter::ACCharacter(const FObjectInitializer& ObjectInitializer)
 {
+	// UserControllerRotation
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-	
+
+	// Mesh
 	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.f, 0.0f));
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> mesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin'"));
-	if (mesh.Object)
-		GetMesh()->SetSkeletalMesh(mesh.Object);
-
+	TObjectPtr<USkeletalMesh> mesh;
+	CHelpers::GetAsset<USkeletalMesh>(mesh, TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin'"));
+	GetMesh()->SetSkeletalMesh(mesh);
+	
 	// StateComponent
 	StateComponent = CreateDefaultSubobject<UCStateComponent>(TEXT("StateComponent"));
 
@@ -32,12 +35,14 @@ void ACCharacter::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 
-	TArray<USceneComponent*> children;
-	GetMesh()->GetChildrenComponents(false, children);
+	{ // LeaderPoseComponent
+		TArray<USceneComponent*> children;
+		GetMesh()->GetChildrenComponents(false, children);
 
-	for (USceneComponent* child : children)
-	{
-		if (USkinnedMeshComponent* skinned = Cast<USkinnedMeshComponent>(child))
-			skinned->SetLeaderPoseComponent(GetMesh());
+		for (TObjectPtr<USceneComponent> child : children)
+		{
+			if (TObjectPtr<USkinnedMeshComponent> skinned = Cast<USkinnedMeshComponent>(child))
+				skinned->SetLeaderPoseComponent(GetMesh());
+		}
 	}
 }

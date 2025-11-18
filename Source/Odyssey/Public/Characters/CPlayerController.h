@@ -4,7 +4,7 @@
 #include "GameFramework/PlayerController.h"
 #include "CPlayerController.generated.h"
 
-class UInputMappingContext;
+class UCMappingContextAsset;
 
 UCLASS()
 class ODYSSEY_API ACPlayerController : public APlayerController
@@ -16,10 +16,7 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere)
-	TSoftObjectPtr<UInputMappingContext> IMC_Locomotion;
-
-	UPROPERTY(EditAnywhere)
-	TSoftObjectPtr<UInputMappingContext> IMC_Combat;
+	TObjectPtr<UCMappingContextAsset> MappingContextAsset;
 	
 	virtual void OnPossess(APawn* InPawn) override;
 };

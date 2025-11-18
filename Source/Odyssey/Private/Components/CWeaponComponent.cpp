@@ -1,6 +1,6 @@
 #include "Components/CWeaponComponent.h"
 #include "Global.h"
-#include "Components/CWeaponComponent_DataAsset.h"
+#include "Components/CWeaponComponentAsset.h"
 #include "Characters/CCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "Components/CStateComponent.h"
@@ -11,7 +11,8 @@
 
 UCWeaponComponent::UCWeaponComponent()
 {
-	WeaponComponentAsset = FSoftObjectPath(TEXT("/Script/Odyssey.CWeaponComponent_DataAsset'/Game/Components/DA_Weapon.DA_Weapon'"));
+	// WeaponComponentAsset
+	CHelpers::GetAsset<UCWeaponComponentAsset>(WeaponComponentAsset, TEXT("/Script/Odyssey.CWeaponComponentAsset'/Game/Components/DA_WeaponComponent.DA_WeaponComponent'"));
 
 	PrimaryComponentTick.bCanEverTick = true;
 }
@@ -20,15 +21,8 @@ void UCWeaponComponent::BindInput(UEnhancedInputComponent* InEnhancedInputCompon
 {
 	CheckNull(InEnhancedInputComponent);
 
-	if (UInputAction* sword = CHelpers::LoadSynchronous(WeaponComponentAsset->IA_Sword))
-	{
-		InEnhancedInputComponent->BindAction(sword, ETriggerEvent::Started, this, &UCWeaponComponent::SetSwordMode);
-	}
-
-	if (UInputAction* attack = CHelpers::LoadSynchronous(WeaponComponentAsset->IA_Attack))
-	{
-		InEnhancedInputComponent->BindAction(attack, ETriggerEvent::Started, this, &UCWeaponComponent::OnAttack);
-	}
+	if (WeaponComponentAsset)
+		WeaponComponentAsset->BindInput(this, InEnhancedInputComponent);
 }
 
 ACWeapon_Attachment* UCWeaponComponent::GetAttachment()
@@ -52,12 +46,12 @@ void UCWeaponComponent::End_Unequip()
 	ChangeType(EWeaponType::Max);
 }
 
-void UCWeaponComponent::SetUnarmedMode()
+void UCWeaponComponent::OnUnarmedMode()
 {
 	GetEquipManager()->Unequip();
 }
 
-void UCWeaponComponent::SetSwordMode()
+void UCWeaponComponent::OnSwordMode()
 {
 	CheckFalse(IsIdleState());
 
@@ -91,7 +85,7 @@ void UCWeaponComponent::SetWeaponType(EWeaponType InNewWeaponType)
 {
 	if (WeaponType == InNewWeaponType)
 	{
-		SetUnarmedMode();
+		OnUnarmedMode();
 
 		return;
 	}
@@ -119,5 +113,5 @@ void UCWeaponComponent::ChangeType(EWeaponType InNewWeaponType)
 
 void UCWeaponComponent::OnAttack(const FInputActionValue& InValue)
 {
-	SetSwordMode();
+	OnSwordMode();
 }

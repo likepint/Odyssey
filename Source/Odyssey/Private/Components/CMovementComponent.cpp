@@ -1,15 +1,16 @@
 #include "Components/CMovementComponent.h"
 #include "Global.h"
+#include "Components/CMovementComponentAsset.h"
 #include "Characters/CCharacter.h"
 #include "EnhancedInputComponent.h"
-#include "Components/CMovementComponent_DataAsset.h"
 #include "Components/CCharacterMovementComponent.h"
 #include "Components/CStateComponent.h"
 
 UCMovementComponent::UCMovementComponent()
 {
-	MovementComponentAsset = FSoftObjectPath(TEXT("/Script/Odyssey.CMovement_DataAsset'/Game/Components/DA_Movement.DA_Movement'"));
-	
+	// MovementComponentAsset
+	CHelpers::GetAsset<UCMovementComponentAsset>(MovementComponentAsset, TEXT("/Script/Odyssey.CMovementComponentAsset'/Game/Components/DA_MovementComponent.DA_MovementComponent'"));
+
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
@@ -17,40 +18,8 @@ void UCMovementComponent::BindInput(UEnhancedInputComponent* InEnhancedInputComp
 {
 	CheckNull(InEnhancedInputComponent);
 
-	if (UInputAction* movement = CHelpers::LoadSynchronous(MovementComponentAsset->IA_Movement))
-	{
-		InEnhancedInputComponent->BindAction(movement, ETriggerEvent::Triggered, this, &UCMovementComponent::OnMovement);
-		InEnhancedInputComponent->BindAction(movement, ETriggerEvent::Completed, this, &UCMovementComponent::OffMovement);
-		InEnhancedInputComponent->BindAction(movement, ETriggerEvent::Canceled, this, &UCMovementComponent::OffMovement);
-	}
-
-	if (UInputAction* crouch = CHelpers::LoadSynchronous(MovementComponentAsset->IA_Crouch))
-	{
-		InEnhancedInputComponent->BindAction(crouch, ETriggerEvent::Started, this, &UCMovementComponent::OnCrouch);
-	}
-
-	if (UInputAction* sprint = CHelpers::LoadSynchronous(MovementComponentAsset->IA_Sprint))
-	{
-		InEnhancedInputComponent->BindAction(sprint, ETriggerEvent::Started, this, &UCMovementComponent::OnSprint);
-		InEnhancedInputComponent->BindAction(sprint, ETriggerEvent::Canceled, this, &UCMovementComponent::OnSprint);
-	}
-
-	if (UInputAction* walk = CHelpers::LoadSynchronous(MovementComponentAsset->IA_Walk))
-	{
-		InEnhancedInputComponent->BindAction(walk, ETriggerEvent::Triggered, this, &UCMovementComponent::OnWalk);
-		InEnhancedInputComponent->BindAction(walk, ETriggerEvent::Completed, this, &UCMovementComponent::OffWalk);
-		InEnhancedInputComponent->BindAction(walk, ETriggerEvent::Canceled, this, &UCMovementComponent::OffWalk);
-	}
-
-	if (UInputAction* look = CHelpers::LoadSynchronous(MovementComponentAsset->IA_Look))
-	{
-		InEnhancedInputComponent->BindAction(look, ETriggerEvent::Triggered, this, &UCMovementComponent::OnLook);
-	}
-
-	if (UInputAction* dodge = CHelpers::LoadSynchronous(MovementComponentAsset->IA_Dodge))
-	{
-		InEnhancedInputComponent->BindAction(dodge, ETriggerEvent::Started, this, &UCMovementComponent::OnDodge);
-	}
+	if (MovementComponentAsset)
+		MovementComponentAsset->BindInput(this, InEnhancedInputComponent);
 }
 
 void UCMovementComponent::SetTargetSpeed(ESpeedType InType)
@@ -77,9 +46,6 @@ void UCMovementComponent::SetControlRotation(bool bInControlRotation)
 void UCMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (MovementComponentAsset)
-		MovementComponentAsset->BeginPlay();
 }
 
 void UCMovementComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -226,5 +192,5 @@ void UCMovementComponent::OnDodge(const FInputActionValue& InValue)
 		state->SetDodgeState();
 	}
 
-	MovementComponentAsset->DodgeData.PlayDodgeMontage(OwnerCharacter);
+	MovementComponentAsset->GetDodgeData().PlayDodgeMontage(OwnerCharacter);
 }

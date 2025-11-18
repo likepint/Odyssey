@@ -22,4 +22,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCameraComponent> CameraComponent;
+
+	virtual void BeginPlay() override;
 };

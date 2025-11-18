@@ -5,10 +5,10 @@
 #include "Interfaces/IBindInput.h"
 #include "CWeaponComponent.generated.h"
 
+class UEnhancedInputComponent;
+
 class ACWeapon_Attachment;
 class UCWeapon_EquipManager;
-
-class UCWeaponComponent_DataAsset;
 
 class UCWeapon_DataAsset;
 class UCWeapon_Data;
@@ -28,6 +28,8 @@ class ODYSSEY_API UCWeaponComponent : public UCComponent, public IIBindInput
 {
 	GENERATED_BODY()
 
+	friend class UCWeaponComponentAsset;
+
 public:
 	FORCEINLINE bool IsUnarmedMode() const { return WeaponType == EWeaponType::Max; }
 	FORCEINLINE bool IsSwordMode() const { return WeaponType == EWeaponType::Sword; }
@@ -43,12 +45,12 @@ public:
 	
 	void End_Unequip();
 
-	void SetUnarmedMode();
-	void SetSwordMode();
+	void OnUnarmedMode();
+	void OnSwordMode();
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DataAsset")
-	TSoftObjectPtr<UCWeaponComponent_DataAsset> WeaponComponentAsset;
+	TObjectPtr<UCWeaponComponentAsset> WeaponComponentAsset;
 
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

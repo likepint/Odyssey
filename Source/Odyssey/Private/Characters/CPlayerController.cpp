@@ -1,6 +1,6 @@
 #include "Characters/CPlayerController.h"
 #include "Global.h"
-#include "InputMappingContext.h"
+#include "Characters/CMappingContextAsset.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Components/CMovementComponent.h"
@@ -8,11 +8,8 @@
 
 ACPlayerController::ACPlayerController()
 {
-	// Locomotion
-	IMC_Locomotion = FSoftObjectPath(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/Inputs/IMC_Locomotion.IMC_Locomotion'"));
-
-	// Combat
-	IMC_Combat = FSoftObjectPath(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/Inputs/IMC_Combat.IMC_Combat'"));
+	// MappingContextAsset
+	CHelpers::GetAsset<UCMappingContextAsset>(MappingContextAsset, TEXT("/Script/Odyssey.CMappingContextAsset'/Game/Characters/Misthios/DA_MappingContext.DA_MappingContext'"));
 
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -27,17 +24,8 @@ void ACPlayerController::OnPossess(APawn* InPawn)
 		{
 			subsystem->ClearAllMappings();
 
-			if (!IMC_Locomotion.IsNull())
-			{
-				if (UInputMappingContext* locomotion = IMC_Locomotion.LoadSynchronous())
-					subsystem->AddMappingContext(locomotion, 0);
-			}
-
-			if (!IMC_Combat.IsNull())
-			{
-				if (UInputMappingContext* combat = IMC_Combat.LoadSynchronous())
-					subsystem->AddMappingContext(combat, 1);
-			}
+			if (MappingContextAsset)
+				MappingContextAsset->OnPossess(subsystem);
 		}
 
 		if (UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))

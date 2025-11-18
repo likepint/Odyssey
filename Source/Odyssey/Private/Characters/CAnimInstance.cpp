@@ -9,9 +9,11 @@ void UCAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
 
+	// OwnerCharacter
 	OwnerCharacter = Cast<ACCharacter>(TryGetPawnOwner());
 	CheckNull(OwnerCharacter);
 
+	// WeaponComponent
 	WeaponComponent = OwnerCharacter->GetComponentByClass<UCWeaponComponent>();
 	if (WeaponComponent)
 		WeaponComponent->OnWeaponTypeChange.AddDynamic(this, &UCAnimInstance::OnWeaponTypeChanged);
@@ -21,21 +23,24 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	if (OwnerCharacter)
-	{
-		Speed = OwnerCharacter->GetVelocity().Size2D();
+	CheckNull(OwnerCharacter);
 
-		const FRotator velocityRot = OwnerCharacter->GetVelocity().ToOrientationRotator();
-		const FRotator actorRot = OwnerCharacter->GetActorRotation();
-		const FRotator deltaRot = UKismetMathLibrary::NormalizedDeltaRotator(velocityRot, actorRot);
-		PrevRotation = UKismetMathLibrary::RInterpTo(PrevRotation, deltaRot, DeltaSeconds, RotationInterpSpeed);
-		Direction = PrevRotation.Yaw;
+	// Speed
+	Speed = OwnerCharacter->GetVelocity().Size2D();
 
-		bMovable = (Speed > 0.0f and !OwnerCharacter->GetCharacterMovement()->GetCurrentAcceleration().Equals(FVector::Zero()));
+	// Direction
+	const FRotator velocityRot = OwnerCharacter->GetVelocity().ToOrientationRotator();
+	const FRotator actorRot = OwnerCharacter->GetActorRotation();
+	const FRotator deltaRot = UKismetMathLibrary::NormalizedDeltaRotator(velocityRot, actorRot);
+	PrevRotation = UKismetMathLibrary::RInterpTo(PrevRotation, deltaRot, DeltaSeconds, RotationInterpSpeed);
+	Direction = PrevRotation.Yaw;
 
-		if (UCMovementComponent* movement = OwnerCharacter->GetComponentByClass<UCMovementComponent>())
-			bCrouched = movement->IsCrouched();
-	}
+	// bMovable
+	bMovable = (Speed > 0.0f and !OwnerCharacter->GetCharacterMovement()->GetCurrentAcceleration().Equals(FVector::Zero()));
+
+	// bCrouched
+	if (UCMovementComponent* movement = OwnerCharacter->GetComponentByClass<UCMovementComponent>())
+		bCrouched = movement->IsCrouched();
 }
 
 void UCAnimInstance::OnWeaponTypeChanged(EWeaponType InPrevWeaponType, EWeaponType InNewWeaponType)
