@@ -20,7 +20,7 @@ void ACPlayerController::OnPossess(APawn* InPawn)
 
 	if (IsLocalPlayerController())
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+		if (TObjectPtr<UEnhancedInputLocalPlayerSubsystem> subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 		{
 			subsystem->ClearAllMappings();
 
@@ -28,12 +28,12 @@ void ACPlayerController::OnPossess(APawn* InPawn)
 				MappingContextAsset->OnPossess(subsystem);
 		}
 
-		if (UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
+		if (TObjectPtr<UEnhancedInputComponent> enhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 		{
-			if (UCMovementComponent* movement = GetPawn()->GetComponentByClass<UCMovementComponent>())
+			if (TObjectPtr<UCMovementComponent> movement = GetPawn()->GetComponentByClass<UCMovementComponent>())
 				movement->BindInput(enhancedInputComponent);
 
-			if (UCWeaponComponent* weapon = GetPawn()->GetComponentByClass<UCWeaponComponent>())
+			if (TObjectPtr<UCWeaponComponent> weapon = GetPawn()->GetComponentByClass<UCWeaponComponent>())
 				weapon->BindInput(enhancedInputComponent);
 		}
 	}

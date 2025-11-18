@@ -14,6 +14,6 @@ void UCAnimNotify_EndState::Notify(USkeletalMeshComponent* MeshComp, UAnimSequen
 	CheckNull(MeshComp);
 	CheckNull(MeshComp->GetOwner());
 
-	if (UCStateComponent* state = MeshComp->GetOwner()->GetComponentByClass<UCStateComponent>())
+	if (TObjectPtr<UCStateComponent> state = MeshComp->GetOwner()->GetComponentByClass<UCStateComponent>())
 		state->SetIdleState();
 }

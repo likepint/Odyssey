@@ -13,7 +13,7 @@ UCWeapon_DataAsset::UCWeapon_DataAsset()
 
 void UCWeapon_DataAsset::BeginPlay(ACCharacter* InOwner, TObjectPtr<UCWeapon_Data>& OutWeaponData)
 {
-	ACWeapon_Attachment* attachment = nullptr;
+	TObjectPtr<ACWeapon_Attachment> attachment = nullptr;
 	if (AttachmentClass)
 	{
 		FActorSpawnParameters params;
@@ -22,7 +22,7 @@ void UCWeapon_DataAsset::BeginPlay(ACCharacter* InOwner, TObjectPtr<UCWeapon_Dat
 		attachment = InOwner->GetWorld()->SpawnActor<ACWeapon_Attachment>(AttachmentClass, params);
 	}
 
-	UCWeapon_EquipManager* equipManager = nullptr;
+	TObjectPtr<UCWeapon_EquipManager> equipManager = nullptr;
 	if (EquipManagerClass)
 	{
 		equipManager = NewObject<UCWeapon_EquipManager>(this, EquipManagerClass);

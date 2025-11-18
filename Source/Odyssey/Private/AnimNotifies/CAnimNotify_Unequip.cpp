@@ -14,7 +14,7 @@ void UCAnimNotify_Unequip::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenc
 	CheckNull(MeshComp);
 	CheckNull(MeshComp->GetOwner());
 
-	UCWeaponComponent* weapon = MeshComp->GetOwner()->GetComponentByClass<UCWeaponComponent>();
+	TObjectPtr<UCWeaponComponent> weapon = MeshComp->GetOwner()->GetComponentByClass<UCWeaponComponent>();
 	CheckNull(weapon);
 	CheckNull(weapon->GetEquipManager());
 

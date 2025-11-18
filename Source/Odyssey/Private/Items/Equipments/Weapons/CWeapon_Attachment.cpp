@@ -12,13 +12,13 @@ ACWeapon_Attachment::ACWeapon_Attachment()
 
 void ACWeapon_Attachment::OnCollisions()
 {
-	for (UShapeComponent* shape : Collisions)
+	for (TObjectPtr<UShapeComponent> shape : Collisions)
 		shape->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 
 void ACWeapon_Attachment::OffCollisions()
 {
-	for (UShapeComponent* shape : Collisions)
+	for (TObjectPtr<UShapeComponent> shape : Collisions)
 		shape->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
@@ -29,14 +29,14 @@ void ACWeapon_Attachment::BeginPlay()
 	// Collisions
 	TArray<USceneComponent*> children;
 	SceneComponent->GetChildrenComponents(true, children);
-	for (USceneComponent* child : children)
+	for (TObjectPtr<USceneComponent> child : children)
 	{
-		if (UPrimitiveComponent* mesh = Cast<UPrimitiveComponent>(child))
+		if (TObjectPtr<UPrimitiveComponent> mesh = Cast<UPrimitiveComponent>(child))
 		{
 			mesh->SetCollisionProfileName(TEXT("Weapon"));
 			mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-			if (UShapeComponent* shape = Cast<UShapeComponent>(mesh))
+			if (TObjectPtr<UShapeComponent> shape = Cast<UShapeComponent>(mesh))
 				Collisions.Add(shape);
 		}
 	}

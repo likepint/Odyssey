@@ -26,7 +26,7 @@ public:
 	{
 		if (!InPath.IsNull())
 		{
-			if (T* asset = InPath.LoadSynchronous())
+			if (TObjectPtr<T> asset = InPath.LoadSynchronous())
 				return asset;
 		}
 

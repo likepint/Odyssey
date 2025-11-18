@@ -13,8 +13,8 @@ void UCAnimNotify_Equip::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceB
 	Super::Notify(MeshComp, Animation, EventReference);
 	CheckNull(MeshComp);
 	CheckNull(MeshComp->GetOwner());
-
-	UCWeaponComponent* weapon = MeshComp->GetOwner()->GetComponentByClass<UCWeaponComponent>();
+	
+	TObjectPtr<UCWeaponComponent> weapon = MeshComp->GetOwner()->GetComponentByClass<UCWeaponComponent>();
 	CheckNull(weapon);
 	CheckNull(weapon->GetEquipManager());
 
