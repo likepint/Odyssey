@@ -2,7 +2,7 @@
 
 UCCharacterMovementComponent::UCCharacterMovementComponent()
 {
-	CrouchedHalfHeight = 65.0f;
+	SetCrouchedHalfHeight(65.0f);
 	
 	MaxWalkSpeed = 0.0f;
 	

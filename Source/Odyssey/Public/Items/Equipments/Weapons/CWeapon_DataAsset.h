@@ -10,6 +10,7 @@ class UCWeapon_Data;
 
 class ACWeapon_Attachment;
 class UCWeapon_EquipManager;
+class UCWeapon_AttackManager;
 
 UCLASS()
 class ODYSSEY_API UCWeapon_DataAsset : public UDataAsset
@@ -26,11 +27,20 @@ private:
 	TSubclassOf<ACWeapon_Attachment> AttachmentClass;
 
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCWeapon_EquipManager> EquipManagerClass;
+
+	UPROPERTY(EditAnywhere)
 	FEquipData EquipData;
 
 	UPROPERTY(EditAnywhere)
 	FUnequipData UnequipData;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<UCWeapon_EquipManager> EquipManagerClass;
+	TSubclassOf<UCWeapon_AttackManager> AttackManagerClass;
+
+	UPROPERTY(EditAnywhere)
+	TArray<FAttackData> DoActionDatas;
+
+	UPROPERTY(EditAnywhere)
+	TArray<FDamagedData> DamagedDatas;
 };

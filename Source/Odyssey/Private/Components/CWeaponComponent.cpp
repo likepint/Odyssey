@@ -7,6 +7,7 @@
 #include "Items/Equipments/Weapons/CWeapon_DataAsset.h"
 #include "Items/Equipments/Weapons/CWeapon_Data.h"
 #include "Items/Equipments/Weapons/CWeapon_Attachment.h"
+#include "Items/Equipments/Weapons/CWeapon_AttackManager.h"
 #include "Items/Equipments/Weapons/CWeapon_EquipManager.h"
 
 UCWeaponComponent::UCWeaponComponent()
@@ -25,7 +26,7 @@ void UCWeaponComponent::BindInput(UEnhancedInputComponent* InEnhancedInputCompon
 		WeaponComponentAsset->BindInput(this, InEnhancedInputComponent);
 }
 
-ACWeapon_Attachment* UCWeaponComponent::GetAttachment()
+TObjectPtr<ACWeapon_Attachment> UCWeaponComponent::GetAttachment()
 {
 	CheckTrueResult(IsUnarmedMode(), nullptr);
 	CheckFalseResult(WeaponDatas[(int32)WeaponType], nullptr);
@@ -33,12 +34,20 @@ ACWeapon_Attachment* UCWeaponComponent::GetAttachment()
 	return WeaponDatas[(int32)WeaponType]->GetAttachment();
 }
 
-UCWeapon_EquipManager* UCWeaponComponent::GetEquipManager()
+TObjectPtr<UCWeapon_EquipManager> UCWeaponComponent::GetEquipManager()
 {
 	CheckTrueResult(IsUnarmedMode(), nullptr);
 	CheckFalseResult(WeaponDatas[(int32)WeaponType], nullptr);
 
 	return WeaponDatas[(int32)WeaponType]->GetEquipManager();
+}
+
+TObjectPtr<UCWeapon_AttackManager> UCWeaponComponent::GetAttackManager()
+{
+	CheckTrueResult(IsUnarmedMode(), nullptr);
+	CheckFalseResult(WeaponDatas[(int32)WeaponType], nullptr);
+
+	return WeaponDatas[(int32)WeaponType]->GetAttackManager();
 }
 
 void UCWeaponComponent::End_Unequip()
@@ -67,13 +76,6 @@ void UCWeaponComponent::BeginPlay()
 		if (WeaponAssets[idx])
 			WeaponAssets[idx]->BeginPlay(OwnerCharacter, WeaponDatas[idx]);
 	}
-}
-
-void UCWeaponComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	CDebug::Screen(IsUnarmedMode() ? TEXT("Unarmed") : TEXT("Sword"), -1, 0.01f);
 }
 
 bool UCWeaponComponent::IsIdleState() const
@@ -114,4 +116,7 @@ void UCWeaponComponent::ChangeType(EWeaponType InNewWeaponType)
 void UCWeaponComponent::OnAttack(const FInputActionValue& InValue)
 {
 	OnSwordMode();
+
+	if (GetAttackManager())
+		GetAttackManager()->Attack();
 }

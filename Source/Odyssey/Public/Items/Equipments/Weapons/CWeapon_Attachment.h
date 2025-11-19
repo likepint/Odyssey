@@ -8,6 +8,14 @@ class USceneComponent;
 class ACCharacter;
 class UShapeComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAttachmentBeginCollision);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAttachmentEndCollision);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FAttachmentBeginOverlap, ACCharacter*, InAttacker, AActor*, InAttackCauser, ACCharacter*, InOther);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAttachmentEndOverlap, ACCharacter*, InAttacker, ACCharacter*, InOther);
+
 UCLASS()
 class ODYSSEY_API ACWeapon_Attachment : public AActor
 {
@@ -24,8 +32,14 @@ public:
 	void OnBeginUnequip();
 	virtual void OnBeginUnequip_Implementation() {};
 
+	FAttachmentBeginCollision OnAttachmentBeginCollision;
+	FAttachmentEndCollision OnAttachmentEndCollision;
+
 	void OnCollisions();
 	void OffCollisions();
+
+	FAttachmentBeginOverlap OnAttachmentBeginOverlap;
+	FAttachmentEndOverlap OnAttachmentEndOverlap;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

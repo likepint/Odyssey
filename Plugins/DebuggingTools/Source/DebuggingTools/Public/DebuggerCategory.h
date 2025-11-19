@@ -7,6 +7,7 @@ class ACPlayerController;
 
 class UCStateComponent;
 class UCWeaponComponent;
+class UCStatusComponent;
 
 struct FCategoryData
 {
@@ -16,6 +17,8 @@ struct FCategoryData
 	float Speed = 0.0f;
 	FString StateType = "";
 	FString WeaponType = "";
+	float CurHealth = 0.0f;
+	float CurStamina = 0.0f;
 };
 
 class DEBUGGINGTOOLS_API DebuggerCategory : public FGameplayDebuggerCategory

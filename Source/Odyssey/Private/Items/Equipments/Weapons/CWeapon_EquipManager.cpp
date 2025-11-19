@@ -27,9 +27,9 @@ void UCWeapon_EquipManager::Equip_Implementation()
 		MovementComponent->SetControlRotation(EquipData.bUseControlRotation);
 	}
 
-	if (EquipData.Montage and !StateComponent->IsAttackingState())
+	if (EquipData.EquipMontage and !StateComponent->IsAttackingState())
 	{
-		OwnerCharacter->PlayAnimMontage(EquipData.Montage, EquipData.PlayRate);
+		OwnerCharacter->PlayAnimMontage(EquipData.EquipMontage, EquipData.PlayRate);
 
 		return;
 	}
@@ -72,9 +72,9 @@ void UCWeapon_EquipManager::Unequip_Implementation()
 		MovementComponent->SetControlRotation(UnequipData.bUseControlRotation);
 	}
 
-	if (UnequipData.Montage and !StateComponent->IsAttackingState())
+	if (UnequipData.UnequipMontage and !StateComponent->IsAttackingState())
 	{
-		OwnerCharacter->PlayAnimMontage(UnequipData.Montage, UnequipData.PlayRate);
+		OwnerCharacter->PlayAnimMontage(UnequipData.UnequipMontage, UnequipData.PlayRate);
 
 		return;
 	}

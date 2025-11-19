@@ -2,6 +2,7 @@
 #include "Global.h"
 #include "Components/CStateComponent.h"
 #include "Components/CMovementComponent.h"
+#include "Components/CStatusComponent.h"
 #include "Components/CWeaponComponent.h"
 
 ACCharacter::ACCharacter(const FObjectInitializer& ObjectInitializer)
@@ -18,16 +19,19 @@ ACCharacter::ACCharacter(const FObjectInitializer& ObjectInitializer)
 	TObjectPtr<USkeletalMesh> mesh;
 	CHelpers::GetAsset<USkeletalMesh>(mesh, TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin'"));
 	GetMesh()->SetSkeletalMesh(mesh);
-	
+
 	// StateComponent
 	StateComponent = CreateDefaultSubobject<UCStateComponent>(TEXT("StateComponent"));
 
 	// MovementComponent
 	MovementComponent = CreateDefaultSubobject<UCMovementComponent>(TEXT("MovementComponent"));
 
+	// StatusComponent
+	StatusComponent = CreateDefaultSubobject<UCStatusComponent>(TEXT("StatusComponent"));
+
 	// WeaponComponent
 	WeaponComponent = CreateDefaultSubobject<UCWeaponComponent>(TEXT("WeaponComponent"));
-	
+
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -45,4 +49,28 @@ void ACCharacter::OnConstruction(const FTransform& Transform)
 				skinned->SetLeaderPoseComponent(GetMesh());
 		}
 	}
+}
+
+float ACCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	if (TObjectPtr<ACCharacter> character = Cast<ACCharacter>(EventInstigator->GetPawn()))
+	{
+		CheckTrueResult(this == character, 0.0f);
+
+		const FGenericTeamId attackerTeamId = character->GetGenericTeamId();
+		CheckTrueResult(GetGenericTeamId() == attackerTeamId, 0.0f);
+
+		DamageData.Character = character;
+	}
+
+	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	DamageData.Power = damage;
+
+	DamageData.Causer = DamageCauser;
+	DamageData.Event = (FAttackDamageEvent*)&DamageEvent;
+
+	StateComponent->SetDamagedState();
+
+	return damage;
 }

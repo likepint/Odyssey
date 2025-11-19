@@ -11,5 +11,6 @@ public class Odyssey : ModuleRules
 		PublicDependencyModuleNames.Add("Engine");
 		PublicDependencyModuleNames.Add("InputCore");
 		PublicDependencyModuleNames.Add("EnhancedInput");
+		PublicDependencyModuleNames.Add("AIModule");
 	}
 }

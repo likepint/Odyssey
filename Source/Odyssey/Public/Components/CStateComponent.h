@@ -25,6 +25,8 @@ class ODYSSEY_API UCStateComponent : public UCComponent
 	GENERATED_BODY()
 
 public:
+	FORCEINLINE const EStateType& GetStateType() const { return StateType; }
+	
 	FORCEINLINE bool IsIdleState() const { return StateType == EStateType::Idle; }
 	FORCEINLINE bool IsEquippingState() const { return StateType == EStateType::Equipping; }
 	FORCEINLINE bool IsAttackingState() const { return StateType == EStateType::Attacking; }

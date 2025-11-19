@@ -9,6 +9,7 @@ class UEnhancedInputComponent;
 
 class ACWeapon_Attachment;
 class UCWeapon_EquipManager;
+class UCWeapon_AttackManager;
 
 class UCWeapon_DataAsset;
 class UCWeapon_Data;
@@ -31,6 +32,8 @@ class ODYSSEY_API UCWeaponComponent : public UCComponent, public IIBindInput
 	friend class UCWeaponComponentAsset;
 
 public:
+	FORCEINLINE const EWeaponType& GetWeaponType() const { return WeaponType; }
+	
 	FORCEINLINE bool IsUnarmedMode() const { return WeaponType == EWeaponType::Max; }
 	FORCEINLINE bool IsSwordMode() const { return WeaponType == EWeaponType::Sword; }
 
@@ -40,9 +43,10 @@ public:
 
 	FWeaponTypeChanged OnWeaponTypeChange;
 
-	ACWeapon_Attachment* GetAttachment();
-	UCWeapon_EquipManager* GetEquipManager();
-	
+	TObjectPtr<ACWeapon_Attachment> GetAttachment();
+	TObjectPtr<UCWeapon_EquipManager> GetEquipManager();
+	TObjectPtr<UCWeapon_AttackManager> GetAttackManager();
+
 	void End_Unequip();
 
 	void OnUnarmedMode();
@@ -53,7 +57,6 @@ protected:
 	TObjectPtr<UCWeaponComponentAsset> WeaponComponentAsset;
 
 	virtual void BeginPlay() override;
-	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "DataAsset")

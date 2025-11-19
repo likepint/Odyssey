@@ -3,6 +3,7 @@
 #include "Characters/CCharacter.h"
 #include "Items/Equipments/Weapons/CWeapon_Attachment.h"
 #include "Items/Equipments/Weapons/CWeapon_EquipManager.h"
+#include "Items/Equipments/Weapons/CWeapon_AttackManager.h"
 #include "Items/Equipments/Weapons/CWeapon_Data.h"
 
 UCWeapon_DataAsset::UCWeapon_DataAsset()
@@ -35,7 +36,30 @@ void UCWeapon_DataAsset::BeginPlay(ACCharacter* InOwner, TObjectPtr<UCWeapon_Dat
 		}
 	}
 
+	TObjectPtr<UCWeapon_AttackManager> attackManager = nullptr;
+	if (attackManager)
+	{
+		attackManager = NewObject<UCWeapon_AttackManager>(this, AttackManagerClass);
+		attackManager->BeginPlay(attachment, equipManager, InOwner, DoActionDatas, DamagedDatas);
+
+		if (attachment)
+		{
+			attachment->OnAttachmentBeginCollision.AddDynamic(attackManager, &UCWeapon_AttackManager::OnAttachmentBeginCollision);
+			attachment->OnAttachmentEndCollision.AddDynamic(attackManager, &UCWeapon_AttackManager::OnAttachmentEndCollision);
+
+			attachment->OnAttachmentBeginOverlap.AddDynamic(attackManager, &UCWeapon_AttackManager::OnAttachmentBeginOverlap);
+			attachment->OnAttachmentEndOverlap.AddDynamic(attackManager, &UCWeapon_AttackManager::OnAttachmentEndOverlap);
+		}
+
+		if (equipManager)
+		{
+			equipManager->OnEquipmentBeginEquip.AddDynamic(attackManager, &UCWeapon_AttackManager::OnBeginEquip);
+			equipManager->OnEquipmentBeginUnequip.AddDynamic(attackManager, &UCWeapon_AttackManager::OnBeginUnequip);
+		}
+	}
+
 	OutWeaponData = NewObject<UCWeapon_Data>();
-	(OutWeaponData)->Attachment = attachment;
-	(OutWeaponData)->EquipManager = equipManager;
+	OutWeaponData->Attachment = attachment;
+	OutWeaponData->EquipManager = equipManager;
+	OutWeaponData->AttackManager = attackManager;
 }

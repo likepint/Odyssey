@@ -5,6 +5,7 @@
 #include "DrawDebugHelpers.h"
 #include "Components/CStateComponent.h"
 #include "Components/CWeaponComponent.h"
+#include "Components/CStatusComponent.h"
 
 // 엔진이 디버그 카테고리를 활성화할 때 최초 1회 호출하는 팩토리 함수
 TSharedRef<FGameplayDebuggerCategory> DebuggerCategory::MakeInstance()
@@ -51,6 +52,12 @@ void DebuggerCategory::CollectData(APlayerController* OwnerPC, AActor* DebugActo
 					PlayerPawnData.WeaponType = weaponType;
 				}
 			}
+
+			if (UCStatusComponent* status = character->GetComponentByClass<UCStatusComponent>())
+			{
+				PlayerPawnData.CurHealth = status->GetCurHealth();
+				PlayerPawnData.CurStamina = status->GetCurStamina();
+			}
 		}
 	}
 }
@@ -64,12 +71,14 @@ void DebuggerCategory::DrawData(APlayerController* OwnerPC, FGameplayDebuggerCan
 	FCanvasTileItem item(FVector2D(10, 10), FVector2D(300, 200), FLinearColor(0, 0, 0, 0.5f));
 	item.BlendMode = ESimpleElementBlendMode::SE_BLEND_AlphaBlend;
 	CanvasContext.DrawItem(item, CanvasContext.CursorX, CanvasContext.CursorY);
-	
+
 	CanvasContext.Printf(FColor::White, TEXT("ActorName : %s"), *PlayerPawnData.ActorName);
 	CanvasContext.Printf(FColor::White, TEXT("Location : %s"), *PlayerPawnData.ActorLocation.ToString());
 	CanvasContext.Printf(FColor::White, TEXT("Speed : %f"), PlayerPawnData.Speed);
 	CanvasContext.Printf(FColor::White, TEXT("StateType : %s"), *PlayerPawnData.StateType);
 	CanvasContext.Printf(FColor::White, TEXT("WeaponType : %s"), *PlayerPawnData.WeaponType);
+	CanvasContext.Printf(FColor::White, TEXT("CurHealth : %f"), PlayerPawnData.CurHealth);
+	CanvasContext.Printf(FColor::White, TEXT("CurStamina : %f"), PlayerPawnData.CurStamina);
 }
 
 DebuggerCategory::DebuggerCategory()
