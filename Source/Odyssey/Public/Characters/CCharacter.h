@@ -17,6 +17,8 @@ class UCMovementComponent;
 class UCStatusComponent;
 class UCWeaponComponent;
 
+struct FAttackDamageEvent;
+
 UCLASS(Abstract, NotBlueprintable)
 class ODYSSEY_API ACCharacter : public ACharacter, public IGenericTeamAgentInterface
 {
@@ -24,10 +26,11 @@ class ODYSSEY_API ACCharacter : public ACharacter, public IGenericTeamAgentInter
 
 public:
 	ACCharacter(const FObjectInitializer& ObjectInitializer);
-	
+
 	virtual void OnConstruction(const FTransform& Transform) override;
-	virtual FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(TeamID); }
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	virtual FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(TeamID); }
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Team")
@@ -48,10 +51,10 @@ protected:
 private:
 	struct FDamageData
 	{
-		ACCharacter* Character;
+		TObjectPtr<ACCharacter> Character;
 		float Power;
-		AActor* Causer;
+		TObjectPtr<AActor> Causer;
 
-		struct FAttackDamageEvent* Event;
+		FAttackDamageEvent* Event;
 	} DamageData;
 };

@@ -83,24 +83,45 @@ bool UCWeaponComponent::IsIdleState() const
 	return OwnerCharacter->GetComponentByClass<UCStateComponent>()->IsIdleState();
 }
 
+bool UCWeaponComponent::IsAttackingState() const
+{
+	return OwnerCharacter->GetComponentByClass<UCStateComponent>()->IsAttackingState();
+}
+
 void UCWeaponComponent::SetWeaponType(EWeaponType InNewWeaponType)
 {
-	if (WeaponType == InNewWeaponType)
+	if (IsUnarmedMode())
 	{
-		OnUnarmedMode();
+		if (IsAttackingState())
+		{
+			GetEquipManager()->ImmediatelyEquip();
+		}
+		else
+		{
+			if (WeaponDatas[(int32)InNewWeaponType])
+				WeaponDatas[(int32)InNewWeaponType]->GetEquipManager()->Equip();
+
+			ChangeType(InNewWeaponType);
+		}
 
 		return;
 	}
-	else if (IsUnarmedMode() == false)
+	else // IsUnarmedMode == false
 	{
-		GetEquipManager()->Unequip();
-	}
+		if (IsAttackingState())
+		{
+			GetEquipManager()->ImmediatelyUnequip();
+			GetEquipManager()->ImmediatelyEquip();
+			
+			return;
+		}
 
-	if (WeaponDatas[(int32)InNewWeaponType])
-	{
-		WeaponDatas[(int32)InNewWeaponType]->GetEquipManager()->Equip();
+		if (WeaponDatas[(int32)InNewWeaponType])
+		{
+			WeaponDatas[(int32)InNewWeaponType]->GetEquipManager()->Equip();
 
-		ChangeType(InNewWeaponType);
+			ChangeType(InNewWeaponType);
+		}
 	}
 }
 

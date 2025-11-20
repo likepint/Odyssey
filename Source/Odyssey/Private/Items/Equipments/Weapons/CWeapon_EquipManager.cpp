@@ -62,6 +62,14 @@ void UCWeapon_EquipManager::End_Equip_Implementation()
 		MovementComponent->SetMovable(true);
 }
 
+void UCWeapon_EquipManager::ImmediatelyEquip_Implementation()
+{
+	CheckNull(OwnerCharacter);
+
+	Begin_Equip();
+	End_Equip();
+}
+
 void UCWeapon_EquipManager::Unequip_Implementation()
 {
 	CheckNull(OwnerCharacter);
@@ -88,4 +96,11 @@ void UCWeapon_EquipManager::End_Unequip_Implementation()
 
 	if (OnEquipmentBeginUnequip.IsBound())
 		OnEquipmentBeginUnequip.Broadcast();
+}
+
+void UCWeapon_EquipManager::ImmediatelyUnequip_Implementation()
+{
+	CheckNull(OwnerCharacter);
+	
+	End_Unequip();
 }

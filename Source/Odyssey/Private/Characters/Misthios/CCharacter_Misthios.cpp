@@ -10,7 +10,7 @@ ACCharacter_Misthios::ACCharacter_Misthios(const FObjectInitializer& ObjectIniti
 	: Super(ObjectInitializer.SetDefaultSubobjectClass<UCCharacterMovementComponent>(CharacterMovementComponentName))
 {
 	TeamID = 1;
-	
+
 	// AnimInstance
 	TSubclassOf<UCAnimInstance> animInstance;
 	CHelpers::GetClass<UCAnimInstance>(animInstance, TEXT("/Script/Engine.AnimBlueprint'/Game/Characters/Misthios/ABP_CAnimInstance_Misthios.ABP_CAnimInstance_Misthios_C'"));
@@ -33,7 +33,7 @@ ACCharacter_Misthios::ACCharacter_Misthios(const FObjectInitializer& ObjectIniti
 void ACCharacter_Misthios::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	{ // Collisions
 		TObjectPtr<UCapsuleComponent> root = Cast<UCapsuleComponent>(GetRootComponent());
 		root->SetCollisionProfileName(TEXT("Misthios"));

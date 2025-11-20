@@ -66,7 +66,6 @@ float ACCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Dam
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	DamageData.Power = damage;
-
 	DamageData.Causer = DamageCauser;
 	DamageData.Event = (FAttackDamageEvent*)&DamageEvent;
 

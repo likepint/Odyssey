@@ -33,9 +33,12 @@ class ODYSSEY_API UCWeaponComponent : public UCComponent, public IIBindInput
 
 public:
 	FORCEINLINE const EWeaponType& GetWeaponType() const { return WeaponType; }
-	
+
 	FORCEINLINE bool IsUnarmedMode() const { return WeaponType == EWeaponType::Max; }
 	FORCEINLINE bool IsSwordMode() const { return WeaponType == EWeaponType::Sword; }
+	
+	FORCEINLINE bool IsIdleState() const;
+	FORCEINLINE bool IsAttackingState() const;
 
 	UCWeaponComponent();
 
@@ -66,8 +69,6 @@ private:
 	TObjectPtr<UCWeapon_Data> WeaponDatas[(int32)EWeaponType::Max];
 
 	EWeaponType WeaponType = EWeaponType::Max;
-
-	bool IsIdleState() const;
 
 	void SetWeaponType(EWeaponType InNewWeaponType);
 	void ChangeType(EWeaponType InNewWeaponType);

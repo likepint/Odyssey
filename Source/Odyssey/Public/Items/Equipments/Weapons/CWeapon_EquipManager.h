@@ -23,9 +23,11 @@ class ODYSSEY_API UCWeapon_EquipManager : public UObject
 
 public:
 	const FEquipData& GetEquipData() const { return EquipData; };
+
 	const FUnequipData& GetUnequipData() const { return UnequipData; };
 
 	FORCEINLINE const bool& GetBeginEquip() const { return bBeginEquip; }
+
 	FORCEINLINE const bool* GetEquipped() { return &bEquipped; }
 
 	void BeginPlay(ACCharacter* InOwner, const FEquipData& InEquipData, const FUnequipData& InUnequipData);
@@ -43,10 +45,16 @@ public:
 	void End_Equip();
 
 	UFUNCTION(BlueprintNativeEvent)
+	void ImmediatelyEquip();
+
+	UFUNCTION(BlueprintNativeEvent)
 	void Unequip();
 
 	UFUNCTION(BlueprintNativeEvent)
 	void End_Unequip();
+	
+	UFUNCTION(BlueprintNativeEvent)
+	void ImmediatelyUnequip();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
