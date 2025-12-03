@@ -76,3 +76,4 @@ DerivedDataCache/*
 
 # etc
 .idea
+.DotSettings.user
