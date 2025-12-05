@@ -5,7 +5,7 @@
 #include "DrawDebugHelpers.h"
 #include "Components/CStateComponent.h"
 #include "Components/CWeaponComponent.h"
-#include "Components/CStatusComponent.h"
+// #include "Components/CStatusComponent.h"
 
 // 엔진이 디버그 카테고리를 활성화할 때 최초 1회 호출하는 팩토리 함수
 TSharedRef<FGameplayDebuggerCategory> DebuggerCategory::MakeInstance()
@@ -21,43 +21,43 @@ void DebuggerCategory::CollectData(APlayerController* OwnerPC, AActor* DebugActo
 	FGameplayDebuggerCategory::CollectData(OwnerPC, DebugActor);
 
 	// 정보를 가져올 대상 캐릭터(OwnerPC가 빙의 중인 캐릭터) 로드
-	if (ACCharacter* character = OwnerPC->GetPawn<ACCharacter>())
+	if (const ACCharacter* Character = OwnerPC->GetPawn<ACCharacter>())
 	{
 		// 데이터를 성공적으로 가져왔으므로 그리기를 활성화
 		{ // PlayerPawnData
 			PlayerPawnData.bDraw = true;
 
-			PlayerPawnData.ActorName = character->GetName();
-			PlayerPawnData.ActorLocation = character->GetActorLocation();
-			PlayerPawnData.Speed = character->GetVelocity().Size2D();
+			PlayerPawnData.ActorName = Character->GetName();
+			PlayerPawnData.ActorLocation = Character->GetActorLocation();
+			PlayerPawnData.Speed = Character->GetVelocity().Size2D();
 
 			// UCStateComponent를 로드하여 현재 상태를 문자열로 변환
-			if (const UEnum* enumPtr = StaticEnum<EStateType>())
+			if (const UEnum* EnumPtr = StaticEnum<EStateType>())
 			{
-				if (UCStateComponent* stateComponent = character->GetComponentByClass<UCStateComponent>())
+				if (const UCStateComponent* StateComponent = Character->GetComponentByClass<UCStateComponent>())
 				{
-					FString stateType = enumPtr->GetNameStringByValue((int32)stateComponent->GetStateType());
-
-					PlayerPawnData.StateType = stateType;
+					FString StateType = EnumPtr->GetNameStringByValue(static_cast<int32>(StateComponent->GetStateType()));
+			
+					PlayerPawnData.StateType = StateType;
 				}
 			}
-
+			
 			// UCWeaponComponent를 가져와서 현재 무기를 문자열로 변환
-			if (const UEnum* enumPtr = StaticEnum<EWeaponType>())
+			if (const UEnum* EnumPtr = StaticEnum<EWeaponType>())
 			{
-				if (UCWeaponComponent* weaponComponent = character->GetComponentByClass<UCWeaponComponent>())
+				if (const UCWeaponComponent* WeaponComponent = Character->GetComponentByClass<UCWeaponComponent>())
 				{
-					FString weaponType = enumPtr->GetNameStringByValue((int32)weaponComponent->GetWeaponType());
-
-					PlayerPawnData.WeaponType = weaponType;
+					FString WeaponType = EnumPtr->GetNameStringByValue(static_cast<int32>(WeaponComponent->GetWeaponType()));
+			
+					PlayerPawnData.WeaponType = WeaponType;
 				}
 			}
-
-			if (UCStatusComponent* status = character->GetComponentByClass<UCStatusComponent>())
-			{
-				PlayerPawnData.CurHealth = status->GetCurHealth();
-				PlayerPawnData.CurStamina = status->GetCurStamina();
-			}
+			
+			// if (UCStatusComponent* status = character->GetComponentByClass<UCStatusComponent>())
+			// {
+			// 	PlayerPawnData.CurHealth = status->GetCurHealth();
+			// 	PlayerPawnData.CurStamina = status->GetCurStamina();
+			// }
 		}
 	}
 }
@@ -68,9 +68,9 @@ void DebuggerCategory::DrawData(APlayerController* OwnerPC, FGameplayDebuggerCan
 	FGameplayDebuggerCategory::DrawData(OwnerPC, CanvasContext);
 
 	// 검은색 반투명(Alpha 0.5) 배경 박스 그리기
-	FCanvasTileItem item(FVector2D(10, 10), FVector2D(300, 200), FLinearColor(0, 0, 0, 0.5f));
-	item.BlendMode = ESimpleElementBlendMode::SE_BLEND_AlphaBlend;
-	CanvasContext.DrawItem(item, CanvasContext.CursorX, CanvasContext.CursorY);
+	FCanvasTileItem Item(FVector2D(10, 10), FVector2D(300, 200), FLinearColor(0, 0, 0, 0.5f));
+	Item.BlendMode = ESimpleElementBlendMode::SE_BLEND_AlphaBlend;
+	CanvasContext.DrawItem(Item, CanvasContext.CursorX, CanvasContext.CursorY);
 
 	CanvasContext.Printf(FColor::White, TEXT("ActorName : %s"), *PlayerPawnData.ActorName);
 	CanvasContext.Printf(FColor::White, TEXT("Location : %s"), *PlayerPawnData.ActorLocation.ToString());

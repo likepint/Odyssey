@@ -13,18 +13,18 @@ void FDebuggingToolsModule::StartupModule()
 {
 	// 카테고리 생성 델리게이트(Delegate) 준비
 	// 엔진이 "이 카테고리가 필요하다"고 요청할 때, 누구를 호출해서 객체를 만들지 설정
-	IGameplayDebugger::FOnGetCategory category;
+	IGameplayDebugger::FOnGetCategory Category;
 
 	// DebuggerCategory 클래스의 정적 함수 MakeInstance를 연결
 	// 엔진은 필요할 때 MakeInstance()를 호출하여 새 디버거 객체 로드
-	category.BindStatic(DebuggerCategory::MakeInstance);
+	Category.BindStatic(DebuggerCategory::MakeInstance);
 
 	// 게임플레이 디버거에 카테고리 등록
 	// - "PlayerPawn": 카테고리 이름 (화면 상단 표시)
 	// - category: 객체 생성 델리게이트
 	// - EnabledInGameAndSimulate: 게임 플레이 중 및 시뮬레이션 모드에서도 사용 가능
 	// - 5: 단축키 NumPad 5번 키로 설정 (토글 방식)
-	IGameplayDebugger::Get().RegisterCategory("PlayerPawn", category, EGameplayDebuggerCategoryState::EnabledInGameAndSimulate, 5);
+	IGameplayDebugger::Get().RegisterCategory("PlayerPawn", Category, EGameplayDebuggerCategoryState::EnabledInGameAndSimulate, 5);
 	
 	// 카테고리가 변경되었음을 디버거 시스템에 알려 즉시 반영
 	IGameplayDebugger::Get().NotifyCategoriesChanged();
