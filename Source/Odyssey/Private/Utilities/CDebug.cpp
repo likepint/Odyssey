@@ -2,12 +2,12 @@
 
 DEFINE_LOG_CATEGORY_STATIC(Odyssey, Display, All)
 
-void CDebug::Log(int32 InValue)
+void CDebug::Log(const int32 InValue)
 {
     UE_LOG(Odyssey, Warning, L"%d", InValue);
 }
 
-void CDebug::Log(float InValue)
+void CDebug::Log(const float InValue)
 {
     UE_LOG(Odyssey, Warning, L"%f", InValue);
 }
@@ -29,89 +29,89 @@ void CDebug::Log(const FRotator& InValue)
 
 void CDebug::Log(const UObject* InValue)
 {
-    FString message;
+    FString Message;
 
     if (InValue)
-       message.Append(InValue->GetName());
+       Message.Append(InValue->GetName());
 
-    message.Append(InValue ? "Not Null" : "Null");
+    Message.Append(InValue ? "Not Null" : "Null");
 
-    UE_LOG(Odyssey, Display, L"%s", *message);
+    UE_LOG(Odyssey, Display, L"%s", *Message);
 }
 
-void CDebug::Log(const FString& InFileName, const FString& InFuncName, int32 InLineNumber)
+void CDebug::Log(const FString& InFileName, const FString& InFuncName, const int32 InLineNumber)
 {
-    int32 index = 0;
+    int32 Index = 0;
 
-    InFileName.FindLastChar(L'\\', index);
+    InFileName.FindLastChar(L'\\', Index);
 
-    int32 length = InFileName.Len() - 1;
+    const int32 Length = InFileName.Len() - 1;
 
-    FString fileName = InFileName.Right(length - index);
+    const FString FileName = InFileName.Right(Length - Index);
 
-    UE_LOG(Odyssey, Display, L"%s, %s, %d", *fileName, *InFuncName, InLineNumber);
+    UE_LOG(Odyssey, Display, L"%s, %s, %d", *FileName, *InFuncName, InLineNumber);
 }
 
-void CDebug::Screen(int32 InValue, int32 InKey, float InDuration, FColor InColor)
+void CDebug::Screen(const int32 InValue, const int32 InKey, const float InDuration, const FColor InColor)
 {
 #if WITH_EDITOR
     GEngine->AddOnScreenDebugMessage(InKey, InDuration, InColor, FString::FromInt(InValue));
 #endif
 }
 
-void CDebug::Screen(float InValue, int32 InKey, float InDuration, FColor InColor)
+void CDebug::Screen(const float InValue, const int32 InKey, const float InDuration, const FColor InColor)
 {
 #if WITH_EDITOR
     GEngine->AddOnScreenDebugMessage(InKey, InDuration, InColor, FString::SanitizeFloat(InValue));
 #endif
 }
 
-void CDebug::Screen(const FString& InValue, int32 InKey, float InDuration, FColor InColor)
+void CDebug::Screen(const FString& InValue, const int32 InKey, const float InDuration, const FColor InColor)
 {
 #if WITH_EDITOR
     GEngine->AddOnScreenDebugMessage(InKey, InDuration, InColor, InValue);
 #endif
 }
 
-void CDebug::Screen(const FVector& InValue, int32 InKey, float InDuration, FColor InColor)
+void CDebug::Screen(const FVector& InValue, const int32 InKey, const float InDuration, const FColor InColor)
 {
 #if WITH_EDITOR
     GEngine->AddOnScreenDebugMessage(InKey, InDuration, InColor, InValue.ToString());
 #endif
 }
 
-void CDebug::Screen(const FRotator& InValue, int32 InKey, float InDuration, FColor InColor)
+void CDebug::Screen(const FRotator& InValue, const int32 InKey, const float InDuration, const FColor InColor)
 {
 #if WITH_EDITOR
     GEngine->AddOnScreenDebugMessage(InKey, InDuration, InColor, InValue.ToString());
 #endif
 }
 
-void CDebug::Screen(const UObject* InValue, int32 InKey, float InDuration, FColor InColor)
+void CDebug::Screen(const UObject* InValue, const int32 InKey, const float InDuration, const FColor InColor)
 {
 #if WITH_EDITOR
-    FString message;
+    FString Message;
 
     if (InValue)
-       message.Append(InValue->GetName());
+       Message.Append(InValue->GetName());
 
-    message.Append(InValue ? "Not Null" : "Null");
+    Message.Append(InValue ? "Not Null" : "Null");
 
-    GEngine->AddOnScreenDebugMessage(InKey, InDuration, InColor, message);
+    GEngine->AddOnScreenDebugMessage(InKey, InDuration, InColor, Message);
 #endif
 }
 
-void CDebug::Screen(const FString& InFileName, const FString& InFuncName, int32 InLineNumber)
+void CDebug::Screen(const FString& InFileName, const FString& InFuncName, const int32 InLineNumber)
 {
 #if WITH_EDITOR
-    int32 index = 0;
+    int32 Index = 0;
 
-    InFileName.FindLastChar(L'\\', index);
+    InFileName.FindLastChar(L'\\', Index);
 
-    int32 length = InFileName.Len() - 1;
+    const int32 Length = InFileName.Len() - 1;
 
-    FString fileName = InFileName.Right(length - index);
+    const FString FileName = InFileName.Right(Length - Index);
 
-    GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Blue, FString::Printf(L"%s, %s, %d", *fileName, *InFuncName, InLineNumber));
+    GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Blue, FString::Printf(L"%s, %s, %d", *FileName, *InFuncName, InLineNumber));
 #endif
 }
