@@ -6,30 +6,18 @@ class ODYSSEY_API CHelpers
 {
 public:	
 	template<typename T>
-	static void GetAsset(TObjectPtr<T>& OutObject, FString InPath)
+	static void GetAsset(T** OutObject, const FString InPath)
 	{
-		ConstructorHelpers::FObjectFinder<T> asset(*InPath);
-		if (asset.Succeeded())
-			OutObject = asset.Object;
+		ConstructorHelpers::FObjectFinder<T> Asset(*InPath);
+		if (Asset.Succeeded())
+			*OutObject = Asset.Object;
 	}
 	
 	template<typename T>
-	static void GetClass(TSubclassOf<T>& OutClass, FString InPath)
+	static void GetClass(TSubclassOf<T>* OutClass, const FString InPath)
 	{
-		ConstructorHelpers::FClassFinder<T> asset(*InPath);
-		if (asset.Succeeded())
-			OutClass = asset.Class;
-	}
-
-	template<typename T>
-	static T* LoadSynchronous(const TSoftObjectPtr<T>& InPath)
-	{
-		if (!InPath.IsNull())
-		{
-			if (TObjectPtr<T> asset = InPath.LoadSynchronous())
-				return asset;
-		}
-
-		return nullptr;
+		ConstructorHelpers::FClassFinder<T> Asset(*InPath);
+		if (Asset.Succeeded())
+			*OutClass = Asset.Class;
 	}
 };
