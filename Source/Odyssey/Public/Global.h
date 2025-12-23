@@ -9,11 +9,38 @@
 #include "Utilities/CHelpers.h"
 #include "Utilities/CDebug.h"
 
-#define CheckTrue(x) { if (x == true) return; }
-#define CheckTrueResult(x, y) { if (x == true) return y; }
+#define CHECK_TRUE(InValue) \
+		{ \
+			if (InValue == true) \
+				return; \
+		}
 
-#define CheckFalse(x) { if (x == false) return; }
-#define CheckFalseResult(x, y) { if (x == false) return y; }
+#define CHECK_TRUE_RESULT(InValue, OutValue) \
+		{ \
+			if (InValue == true) \
+				return OutValue; \
+		}
 
-#define CheckNull(x) { if (x == nullptr) return; }
-#define CheckNullResult(x, y) { if (x == nullptr) return y; }
+#define CHECK_FALSE(InValue) \
+		{ \
+			if (InValue == false) \
+				return; \
+		}
+
+#define CHECK_FALSE_RESULT(InValue, OutValue) \
+		{ \
+			if (InValue == false) \
+				return OutValue; \
+		}
+
+#define CHECK_NULL(InValue) \
+		{ \
+			if (InValue == nullptr) \
+				return; \
+		}
+
+#define CHECK_NULL_RESULT(InValue, OutValue) \
+		{ \
+			if (InValue == nullptr) \
+				return OutValue; \
+		}
